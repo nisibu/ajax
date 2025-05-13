@@ -1,0 +1,281 @@
+@charset "utf-8";
+
+body {
+    font-family: sans-serif;
+    text-align: center;
+    background: linear-gradient(270deg, #f0f8ff, #e0ffff);
+    background-size: 400% 400%;
+    padding: 30px;
+    animation: wave 15s ease infinite;
+    transition: background-image 1s ease;
+}
+
+h1 {
+    color: #333;
+}
+
+.mood-button,
+#next-button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0077cc;
+    color: white;
+    cursor: pointer;
+}
+
+.mood-button:hover,
+#next-button:hover {
+    background-color: #005fa3;
+}
+
+#player {
+    margin-top: 30px;
+}
+
+@keyframes wave {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* ハート */
+.heart {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: pink;
+    transform: rotate(45deg);
+    animation: floatUp 4s linear infinite;
+    left: 0;
+    top: 0;
+    z-index: 10;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: inherit;
+    /* 親の背景色を継承 */
+    border-radius: 50%;
+}
+
+.heart::before {
+    top: -15px;
+    left: 0;
+}
+
+.heart::after {
+    left: -15px;
+    top: 0;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(45deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100vh) rotate(45deg);
+        opacity: 0;
+    }
+}
+
+/* 🌧️ 雨のしずくスタイル */
+.raindrop {
+    position: absolute;
+    width: 2px;
+    height: 15px;
+    background: rgba(255, 255, 255, 0.6);
+    top: -20px;
+    animation: fall 1.5s linear forwards;
+    z-index: 5;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(270deg, #fff176, #ff8a65);
+    background-size: 400% 400%;
+    animation: none;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #fff;
+    text-align: center;
+}
+
+.mood-button {
+    font-size: 1.2rem;
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.happy {
+    background: #ffeb3b;
+    color: #000;
+}
+
+.happy:hover {
+    background: #fbc02d;
+}
+
+.sad {
+    background: #0d47a1;
+    color: #fff;
+}
+
+.sad:hover {
+    background: #0b36a1;
+}
+
+.relax {
+    background: #03a9f4;
+    color: #fff;
+}
+
+.relax:hover {
+    background: #0288d1;
+}
+
+.focus {
+    background: #9e9e9e;
+    color: #fff;
+}
+
+.focus:hover {
+    background: #757575;
+}
+
+#player {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#next-button {
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin-top: 20px;
+    background: white;
+    color: #333;
+    border-radius: 5px;
+    display: none;
+}
+
+#next-button:hover {
+    background-color: #f2f2f2;
+}
+
+.heart {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: pink;
+    transform: rotate(45deg);
+    animation: floatUp 4s linear infinite;
+    left: 0;
+    top: 0;
+    z-index: 10;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: inherit;
+    /* 親の背景色を継承 */
+    border-radius: 50%;
+}
+
+.heart::before {
+    top: -15px;
+    left: 0;
+}
+
+.heart::after {
+    left: -15px;
+    top: 0;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(45deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100vh) rotate(45deg);
+        opacity: 0;
+    }
+}
+
+/* 雨粒 */
+.raindrop {
+    position: absolute;
+    width: 2px;
+    height: 15px;
+    background: rgba(255, 255, 255, 0.8);
+    top: -20px;
+    animation: fall 1.5s linear forwards;
+    z-index: 10;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+.bubble {
+    position: absolute;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    animation: rise 5s linear forwards;
+    z-index: 5;
+}
+
+@keyframes rise {
+    0% {
+        transform: translateY(0);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: translateY(-100vh);
+        opacity: 0;
+    }
+}
