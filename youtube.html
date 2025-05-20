@@ -18,7 +18,7 @@
         <button class="mood-button focus" onclick="selectMood('focus')">集中したい</button>
 
         <br />
-        <button id="next-button">次の動画 ▶</button>
+        <button id="next-button" style="display: none;">次の動画 ▶</button>
 
         <div id="player"></div>
     </div>
@@ -34,14 +34,11 @@
         let currentMood = "";
         let currentItems = [];
         let usedIndexes = [];
-        let playerAPI;
+
+        let playerAPI = null;
 
         function onYouTubeIframeAPIReady() {
-            playerAPI = new YT.Player('player', {
-                events: {
-                    'onReady': event => event.target.stopVideo()
-                }
-            });
+            // プレイヤーはfetchYoutubeVideos内で初期化する
         }
 
         function selectMood(mood) {
@@ -51,160 +48,7 @@
             fetchYoutubeVideos(query);
             applyMoodTheme(mood);
 
-            if (mood === "happy") {
-                startHeartAnimation();
-                stopRain();
-            } else if (mood === "sad") {
-                stopHeartAnimation();
-                startRain();
-            } else {
-                stopHeartAnimation();
-                stopRain();
-            }
-        }
-
-        function fetchYoutubeVideos(query) {
-            const apiKey = "AIzaSyChE7jHgeXkQ3OWMcDZvkhA3I6exJpRZws"; // ← APIキーを実際のものに
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=10&key=${apiKey}`;
-
-            fetch(url)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.items.length > 0) {
-                        currentItems = data.items;
-                        showRandomVideo();
-                        document.getElementById("next-button").style.display = "inline-block";
-                    } else {
-                        alert("動画が見つかりませんでした。");
-                    }
-                })
-                .catch(err => {
-                    console.error("エラー:", err);
-                    alert("エラーが発生しました。");
-                });
-        }
-
-        function showRandomVideo() {
-            if (usedIndexes.length === currentItems.length) usedIndexes = [];
-            let index;
-            do {
-                index = Math.floor(Math.random() * currentItems.length);
-            } while (usedIndexes.includes(index));
-            usedIndexes.push(index);
-
-            const videoId = currentItems[index].id.videoId;
-            const iframe = document.createElement('iframe');
-            iframe.width = "560";
-            iframe.height = "315";
-            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1`;
-            iframe.frameBorder = "0";
-            iframe.allow = "autoplay; encrypted-media";
-            iframe.allowFullscreen = true;
-
-            const player = document.getElementById("player");
-            player.innerHTML = '';
-            player.appendChild(iframe);
-        }
-
-        document.getElementById("next-button").addEventListener("click", showRandomVideo);
-
-        //ハートアニメーション
-
-        let heartInterval;
-
-        function startHeartAnimation() {
-            if (heartInterval) return;
-            heartInterval = setInterval(() => {
-                const heart = document.createElement("div");
-                heart.className = "heart";
-                heart.style.left = Math.random() * 100 + "vw";  // ランダムに横位置を決める
-                heart.style.top = "100vh";  // 下から出てくる
-
-                // カラフルなハートの色をランダムに設定
-                const colors = ["#FF5733", "#33FF57", "#5733FF", "#FF33A6", "#33FFF5", "#F1C40F"];
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                heart.style.backgroundColor = randomColor;
-
-                document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), 4000);  // 4秒後にハートを削除
-            }, 300);  // 300msごとに新しいハートを表示
-        }
-
-        function stopHeartAnimation() {
-            clearInterval(heartInterval);
-            heartInterval = null;
-            document.querySelectorAll(".heart").forEach(el => el.remove());  // 全てのハートを削除
-        }
-
-        // 雨アニメーション
-        let rainInterval;
-        function startRain() {
-            if (rainInterval) return;
-            rainInterval = setInterval(() => {
-                const drop = document.createElement("div");
-                drop.className = "raindrop";
-                drop.style.left = Math.random() * window.innerWidth + "px";
-                drop.style.animationDuration = (1 + Math.random()).toFixed(2) + "s";
-                document.body.appendChild(drop);
-                setTimeout(() => drop.remove(), 2000);
-            }, 100);
-        }
-
-        function stopRain() {
-            clearInterval(rainInterval);
-            rainInterval = null;
-            document.querySelectorAll(".raindrop").forEach(el => el.remove());
-        }
-
-        // 背景テーマ（任意で拡張可）
-        function applyMoodTheme(mood) {
-            const body = document.body;
-            body.style.animation = "none";
-            switch (mood) {
-                case "happy":
-                    body.style.backgroundImage = "linear-gradient(270deg, #fff176, #ff8a65)";
-                    break;
-                case "sad":
-                    body.style.backgroundImage = "linear-gradient(270deg, #90caf9, #3f51b5)";
-                    break;
-                case "relax":
-                    body.style.backgroundImage = "linear-gradient(270deg, #b2dfdb, #81d4fa)";
-                    break;
-                case "focus":
-                    body.style.backgroundImage = "linear-gradient(270deg, #cfd8dc, #37474f)";
-                    break;
-            }
-        }
-        let bubbleInterval;
-
-        function startBubbleAnimation() {
-            if (bubbleInterval) return;
-            bubbleInterval = setInterval(() => {
-                const bubble = document.createElement("div");
-                bubble.className = "bubble";
-                const size = Math.random() * 20 + 10; // 10〜30px
-                bubble.style.width = `${size}px`;
-                bubble.style.height = `${size}px`;
-                bubble.style.left = Math.random() * window.innerWidth + "px";
-                bubble.style.animationDuration = (4 + Math.random() * 2).toFixed(2) + "s";
-                document.body.appendChild(bubble);
-                setTimeout(() => bubble.remove(), 6000);
-            }, 300);
-        }
-
-        function stopBubbleAnimation() {
-            clearInterval(bubbleInterval);
-            bubbleInterval = null;
-            document.querySelectorAll(".bubble").forEach(el => el.remove());
-        }
-
-        function selectMood(mood) {
-            currentMood = mood;
-            usedIndexes = [];
-            const query = moodToKeyword[mood];
-            fetchYoutubeVideos(query);
-            applyMoodTheme(mood);
-
+            // エフェクト制御
             if (mood === "happy") {
                 startHeartAnimation();
                 stopRain();
@@ -224,6 +68,146 @@
             }
         }
 
+        function fetchYoutubeVideos(query) {
+            const apiKey = "YOUR_API_KEY"; // ← 自分のAPIキーに置き換えてください
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=10&key=${apiKey}`;
+
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.items.length > 0) {
+                        currentItems = data.items;
+                        usedIndexes = [];
+
+                        const firstVideoId = currentItems[0].id.videoId;
+
+                        if (!playerAPI) {
+                            playerAPI = new YT.Player('player', {
+                                height: '315',
+                                width: '560',
+                                videoId: firstVideoId,
+                                events: {
+                                    'onReady': () => {
+                                        document.getElementById("next-button").style.display = "inline-block";
+                                    }
+                                }
+                            });
+                        } else {
+                            playerAPI.loadVideoById(firstVideoId);
+                            document.getElementById("next-button").style.display = "inline-block";
+                        }
+                    } else {
+                        alert("動画が見つかりませんでした。");
+                    }
+                })
+                .catch(err => {
+                    console.error("エラー:", err);
+                    alert("エラーが発生しました。");
+                });
+        }
+
+        function showRandomVideo() {
+            if (!playerAPI) {
+                console.warn("プレイヤーがまだ初期化されていません");
+                return;
+            }
+
+            if (usedIndexes.length === currentItems.length) usedIndexes = [];
+
+            let index;
+            do {
+                index = Math.floor(Math.random() * currentItems.length);
+            } while (usedIndexes.includes(index));
+
+            usedIndexes.push(index);
+
+            const videoId = currentItems[index].id.videoId;
+            playerAPI.loadVideoById(videoId);
+        }
+
+        document.getElementById("next-button").addEventListener("click", showRandomVideo);
+
+        function applyMoodTheme(mood) {
+            const body = document.body;
+            body.style.animation = "none";
+            switch (mood) {
+                case "happy":
+                    body.style.backgroundImage = "linear-gradient(270deg, #fff176, #ff8a65)";
+                    break;
+                case "sad":
+                    body.style.backgroundImage = "linear-gradient(270deg, #90caf9, #3f51b5)";
+                    break;
+                case "relax":
+                    body.style.backgroundImage = "linear-gradient(270deg, #b2dfdb, #81d4fa)";
+                    break;
+                case "focus":
+                    body.style.backgroundImage = "linear-gradient(270deg, #cfd8dc, #37474f)";
+                    break;
+            }
+        }
+
+        // アニメーション系
+        let heartInterval;
+        function startHeartAnimation() {
+            if (heartInterval) return;
+            heartInterval = setInterval(() => {
+                const heart = document.createElement("div");
+                heart.className = "heart";
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.top = "100vh";
+                const colors = ["#FF5733", "#33FF57", "#5733FF", "#FF33A6", "#33FFF5", "#F1C40F"];
+                heart.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 4000);
+            }, 300);
+        }
+
+        function stopHeartAnimation() {
+            clearInterval(heartInterval);
+            heartInterval = null;
+            document.querySelectorAll(".heart").forEach(el => el.remove());
+        }
+
+        let rainInterval;
+        function startRain() {
+            if (rainInterval) return;
+            rainInterval = setInterval(() => {
+                const drop = document.createElement("div");
+                drop.className = "raindrop";
+                drop.style.left = Math.random() * window.innerWidth + "px";
+                drop.style.animationDuration = (1 + Math.random()).toFixed(2) + "s";
+                document.body.appendChild(drop);
+                setTimeout(() => drop.remove(), 2000);
+            }, 100);
+        }
+
+        function stopRain() {
+            clearInterval(rainInterval);
+            rainInterval = null;
+            document.querySelectorAll(".raindrop").forEach(el => el.remove());
+        }
+
+        let bubbleInterval;
+        function startBubbleAnimation() {
+            if (bubbleInterval) return;
+            bubbleInterval = setInterval(() => {
+                const bubble = document.createElement("div");
+                bubble.className = "bubble";
+                const size = Math.random() * 20 + 10;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = Math.random() * window.innerWidth + "px";
+                bubble.style.animationDuration = (4 + Math.random() * 2).toFixed(2) + "s";
+                document.body.appendChild(bubble);
+                setTimeout(() => bubble.remove(), 6000);
+            }, 300);
+        }
+
+        function stopBubbleAnimation() {
+            clearInterval(bubbleInterval);
+            bubbleInterval = null;
+            document.querySelectorAll(".bubble").forEach(el => el.remove());
+        }
     </script>
 </body>
 
