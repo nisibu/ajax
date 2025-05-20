@@ -182,18 +182,30 @@ h1 {
     text-align: center;
 }
 
+#player {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
 #next-button {
-    font-size: 1rem;
-    padding: 10px 20px;
-    margin-top: 20px;
-    background: white;
-    color: #333;
-    border-radius: 5px;
     display: none;
+    margin: 20px auto 0;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    text-align: center;
 }
 
 #next-button:hover {
-    background-color: #f2f2f2;
+    background-color: #e2e1e1;
 }
 
 .heart {
