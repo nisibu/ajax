@@ -64,7 +64,7 @@
         }
 
         function fetchYoutubeVideos(query) {
-            const apiKey = "AIzaSyBFKj-MJObUmUbPXOh23qWdKkoYGXJl40E"; // ← APIキーを実際のものに
+            const apiKey = "AIzaSyChE7jHgeXkQ3OWMcDZvkhA3I6exJpRZws"; // ← APIキーを実際のものに
             const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=10&key=${apiKey}`;
 
             fetch(url)
@@ -108,7 +108,7 @@
 
         document.getElementById("next-button").addEventListener("click", showRandomVideo);
 
-        // 🎈 ハートアニメーション
+        // ハートアニメーション
 
         let heartInterval;
 
@@ -156,7 +156,7 @@
             document.querySelectorAll(".raindrop").forEach(el => el.remove());
         }
 
-        // 🌈 背景テーマ（任意で拡張可）
+        // 背景テーマ（任意で拡張可）
         function applyMoodTheme(mood) {
             const body = document.body;
             body.style.animation = "none";
